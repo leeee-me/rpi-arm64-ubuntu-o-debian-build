@@ -17,6 +17,8 @@ Then you obtained image of "ubuntu-18.04-aarch64-raspberrypi.img", and you could
 
 -----
 
+<pre>
+
 > U-Boot 2017.11 (Jul 27 2018 - 15:18:45 +0800)
 
 > DRAM:  948 MiB
@@ -533,3 +535,4 @@ Then you obtained image of "ubuntu-18.04-aarch64-raspberrypi.img", and you could
 > ii  xz-utils       5.2.2-1.3    arm64        XZ-format compression utilities
 > ii  zlib1g:arm64   1:1.2.11.dfs arm64        compression library - runtime
 
+</pre>
