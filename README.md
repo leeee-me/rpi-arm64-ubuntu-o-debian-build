@@ -15,8 +15,6 @@ $ ./buildimage.sh
 
 Then you obtained image of "ubuntu-18.04-aarch64-raspberrypi.img", and you could place it on to your micro SD card. I strongly suggest you connect your RPi 3 with UART cable and watch it booted on a console/terminal emulator (PuTTY, TeraTerm, minicom, etc)
 
-*****************
-
 U-Boot 2017.11 (Jul 27 2018 - 15:18:45 +0800)
 
 DRAM:  948 MiB
