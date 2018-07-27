@@ -13,9 +13,12 @@ $ ./buildfirmware.sh
 $ ./buildkernel.sh
 $ ./buildimage.sh
 </pre>
-Then you obtained image of "ubuntu-18.04-aarch64-raspberrypi.img", and you could place it on to your micro SD card. I strongly suggest you connect your RPi 3 with UART cable and watch it booted on a console/terminal emulator (PuTTY, TeraTerm, minicom, etc)
+Then you obtained image of "ubuntu-${DISTRIB_RELEASE}-arm64-raspberrypi3.img", and you could place it on to your micro SD card. 
+<pre>
+$ xzcat ubuntu-VV.vv-arm64-raspberrypi3.img.xz | pv | sudo dd of=/dev/sdX
+</pre>
 
------
+I strongly suggest you connect your RPi 3 with UART cable and watch it booted on a console/terminal emulator (PuTTY, TeraTerm, minicom, etc)
 
 <pre>
 

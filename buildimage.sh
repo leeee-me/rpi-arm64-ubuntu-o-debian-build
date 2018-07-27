@@ -2,10 +2,10 @@
 cd build
 sudo apt-get install -y dosfstools dump parted kpartx
 
-sudo dd if=/dev/zero of=image.img bs=1M count=2100
+sudo dd if=/dev/zero of=image.img bs=1M count=4096
 sudo parted image.img mktable msdos
-sudo parted image.img --script -- mkpart primary fat32 8192s 2682879s
-sudo parted image.img --script -- mkpart primary ext4 2682880s -1
+sudo parted image.img --script -- mkpart primary fat32 8192s 128MiB
+sudo parted image.img --script -- mkpart primary ext4 128MiB -1s
 
 sudo kpartx -av image.img
 sleep 1s
@@ -28,5 +28,10 @@ sudo umount /mnt
 sudo sync
 sudo kpartx -d image.img
 
-sudo mv image.img ubuntu-18.04-aarch64-raspberrypi.img
+. rootfs/etc/lsb-release
+
+sudo mv image.img ubuntu-$DISTRIB_RELEASE-arm64-raspberrypi3.img
+sudo xz -1 --verbose ubuntu-$DISTRIB_RELEASE-arm64-raspberrypi3.img
+sha256sum ubuntu-$DISTRIB_RELEASE-arm64-raspberrypi3.img > SHA256SUM
+echo "xzcat  ubuntu-$DISTRIB_RELEASE-arm64-raspberrypi3.img.xz | pv | sudo dd of=/dev/sdX"
 cd ..
