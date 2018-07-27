@@ -1,7 +1,7 @@
 # rpi3-arm64-ubuntu
 Build RPi3 boot and Ubuntu system root rootfs with u-boot support in arm64 / aarch64
 
-This project is inspired by https://github.com/chainsx/ubuntu64-rpi/tree/ubuntu-18.04-arm64/buildbuildfirmware.sh.
+This project is inspired by https://github.com/chainsx/ubuntu64-rpi/tree/ubuntu-18.04-arm64/build.
 However, I do not fork it. Instead, I revised and leave here for future improvement.
 
 These recipe of scripts already were verified on an amd64 Ubuntu 16.04 LTS with Raspberry Pi 3 Model B v1.2. THe verified target is arm64 Ubuntu 18.04 LTS.
