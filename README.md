@@ -29,6 +29,10 @@ You could rebuild the kernel all the time when the upstream kernel is upgraded, 
 /lib/modules/`uname -r`
 </pre>
 
+Now I added make command to generate kernel's debian packages (linux-image & linux-headers) for convenience of kernel upgrade. At the same time, these can be used to build customer (3rd-party) kernel modules. However, you need to manually work on RPi3's /boot kernel replacement. The vmlinuz is gziped Image(.gz), and you need to gunzip vmlinuz and name it as Image, so that u-boot can load it correctly.
+
+I learned from Armbian and now I am going to study on how to generate linux-kernel-dtb package. Stay tuned.
+
 <pre>
 
 U-Boot 2017.11 (Jul 27 2018 - 15:18:45 +0800)
