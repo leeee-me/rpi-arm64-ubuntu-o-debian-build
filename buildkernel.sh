@@ -4,7 +4,7 @@ S=$(pwd)
 
 sudo apt-get install u-boot-tools
 
-CROSS=/opt/aarch64/bin/aarch64-linux-gnu-
+CROSS=aarch64-linux-gnu-
 
 git clone --depth 1 --branch v2017.11 git://git.denx.de/u-boot.git v2017.11
 cd v2017.11
@@ -63,5 +63,13 @@ device_tree_end=0x8000
 EOM
 
 echo "earlyprintk dwc_otg.lpm_enable=0 console=ttyAMA0,115200 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 elevator=deadline fsck.repair=yes rootwait" > $S/boot/cmdline.txt
+
 cd $S
+
+make -C linux ARCH=arm64 CROSS_COMPILE=$CROSS -j4 bindeb-pkg
+mkdir deb-pkg
+mv linux-* deb-pkg
+
+echo "Debian packages of linux-image and linux-headers are generated, "
+echo "Please note that vmlinuz is gzip-compressed Image(.gz), and it must be gunziped as Image for u-boot"
 
