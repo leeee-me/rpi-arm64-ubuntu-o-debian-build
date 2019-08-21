@@ -27,7 +27,7 @@ mkimage -A arm64 -O linux -T script -d u-boot-script.txt boot.scr
 sudo cp boot.scr $S/boot
 cd ..
 
-git clone --depth=1 -b rpi-4.14.y https://github.com/raspberrypi/linux.git
+git clone --depth=1 -b rpi-4.19.y https://github.com/raspberrypi/linux.git
 cd linux
 make ARCH=arm64 CROSS_COMPILE=$CROSS bcmrpi3_defconfig
 make ARCH=arm64 CROSS_COMPILE=$CROSS -j4
