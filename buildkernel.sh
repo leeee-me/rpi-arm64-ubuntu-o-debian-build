@@ -2,7 +2,8 @@
 cd build
 S=$(pwd)
 
-sudo apt-get install u-boot-tools
+sudo apt-get install gcc-aarch64-linux-gnu dpkg-dev
+sudo apt-get install bc bison flex libssl-dev u-boot-tools
 
 CROSS=aarch64-linux-gnu-
 
