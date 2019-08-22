@@ -6,7 +6,8 @@ echo "prepare rootfs"
 sudo apt-get install debootstrap qemu-user-static
 sudo mkdir rootfs
 sudo qemu-debootstrap --arch arm64 bionic rootfs
-sudo cp /etc/dnsmasq.resolv.conf rootfs/etc/resolv.conf
+sudo cp /etc/resolv.conf rootfs/etc/resolv.conf
+sudo cp /run/systemd/resolve/resolv.conf rootfs/etc/resolv.conf
 sudo chroot rootfs locale-gen en_US.UTF-8
 sudo chroot rootfs apt-get update
 sudo chroot rootfs apt-get upgrade
