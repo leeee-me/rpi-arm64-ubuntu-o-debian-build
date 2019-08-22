@@ -32,6 +32,6 @@ sudo kpartx -d image.img
 
 sudo mv image.img ubuntu-$DISTRIB_RELEASE-arm64-raspberrypi3.img
 sudo xz -1 --verbose ubuntu-$DISTRIB_RELEASE-arm64-raspberrypi3.img
-sha256sum ubuntu-$DISTRIB_RELEASE-arm64-raspberrypi3.img > SHA256SUM
+sha256sum ubuntu-$DISTRIB_RELEASE-arm64-raspberrypi3.img.xz > ubuntu-$DISTRIB_RELEASE-arm64-raspberrypi3.img.xz.SHA256SUM
 echo "xzcat  ubuntu-$DISTRIB_RELEASE-arm64-raspberrypi3.img.xz | pv | sudo dd of=/dev/sdX"
 cd ..
