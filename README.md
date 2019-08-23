@@ -1,5 +1,6 @@
-# rpi3-arm64-ubuntu
-Build RPi3 boot and Ubuntu system root rootfs with u-boot bootloader support in arm64 / aarch64
+# rpi-arm64-ubuntu-build
+
+Build RPi3/RPi4 boot and Ubuntu system root rootfs with u-boot bootloader support in arm64 / aarch64
 
 This project is inspired by https://github.com/chainsx/ubuntu64-rpi/tree/ubuntu-18.04-arm64/build.
 However, I do not fork it. Instead, I revised it and left it here for future improvement.
