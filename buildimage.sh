@@ -31,8 +31,7 @@ sudo kpartx -d image.img
 
 . rootfs/etc/lsb-release
 
-. .RPi-Target
-echo "RPI_TARGET=rpi3b" > .RPi-Target
+. ./.RPi-Target
 
 [ -z $RPI_TARGET ] && RPI_TARGET=raspberrypi
 
