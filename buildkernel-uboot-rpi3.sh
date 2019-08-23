@@ -72,6 +72,8 @@ echo "earlyprintk dwc_otg.lpm_enable=0 console=ttyAMA0,115200 console=tty1 root=
 
 cd $S
 
+echo “RPI_TARGET=rpi3b” > ./.RPi-Target
+
 make -C linux ARCH=arm64 O=./kernel-build CROSS_COMPILE=$CROSS -j4 bindeb-pkg
 mkdir deb-pkg
 mv linux/linux-* deb-pkg
