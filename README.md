@@ -6,16 +6,25 @@ However, I do not fork it. Instead, I revised it and left it here for future imp
 
 This recipe of scripts already were verified on an amd64 Ubuntu 16.04 LTS with Raspberry Pi 3 Model B v1.2. The verified target is arm64 Ubuntu 18.04 LTS.
 
+(
+Updated: Raspberry Pi 4 Model B is coming now. I modified the scripts by some known and explored workarounds by
+https://blog.cloudkernels.net/posts/rpi4-64bit-image/
+https://jamesachambers.com/raspberry-pi-ubuntu-server-18-04-2-installation-guide/
+)
+
+
 Study the scripts themselves and then customize anything you would like to have.
 <pre>
 $ ./buildrootfs.sh
 $ ./buildfirmware.sh
-$ ./buildkernel.sh
+$ ./buildkernel-uboot-rpi3.sh  # this is RPi3 kernel boot with u-boot
+  or
+$ ./buildkernel-armstub-rpi4.sh # this is RPi4 kernel boot with armstub8 (temp workaround solution)
 $ ./buildimage.sh
 </pre>
-Then you obtained image of "ubuntu-${DISTRIB_RELEASE}-arm64-raspberrypi3.img", and you could place it on to your micro SD card. 
+Then you obtained image of "ubuntu-${DISTRIB_RELEASE}-arm64-${RPT_TARGET}.img", and you could place it on to your micro SD card. 
 <pre>
-$ xzcat ubuntu-VV.vv-arm64-raspberrypi3.img.xz | pv | sudo dd of=/dev/sdX
+$ xzcat ubuntu-VV.vv-arm64-ttt.img.xz | pv | sudo dd of=/dev/sdX
 </pre>
 
 I strongly suggest you to connect your RPi 3 with a UART/USB cable and watch it booting-up on a console/terminal emulator (PuTTY, TeraTerm, minicom, etc)

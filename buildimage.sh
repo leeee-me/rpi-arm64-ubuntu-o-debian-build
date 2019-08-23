@@ -2,6 +2,7 @@
 cd build
 sudo apt-get install -y dosfstools dump parted kpartx
 
+# make a 4G size SD card image, 128M for /boot
 sudo dd if=/dev/zero of=image.img bs=1M count=4096
 sudo parted image.img mktable msdos
 sudo parted image.img --script -- mkpart primary fat32 8192s 128MiB
@@ -30,8 +31,14 @@ sudo kpartx -d image.img
 
 . rootfs/etc/lsb-release
 
-sudo mv image.img ubuntu-$DISTRIB_RELEASE-arm64-raspberrypi3.img
-sudo xz -1 --verbose ubuntu-$DISTRIB_RELEASE-arm64-raspberrypi3.img
-sha256sum ubuntu-$DISTRIB_RELEASE-arm64-raspberrypi3.img.xz > ubuntu-$DISTRIB_RELEASE-arm64-raspberrypi3.img.xz.SHA256SUM
-echo "xzcat  ubuntu-$DISTRIB_RELEASE-arm64-raspberrypi3.img.xz | pv | sudo dd of=/dev/sdX"
+. .RPi-Target
+echo "RPI_TARGET=rpi3b" > .RPi-Target
+
+[ -z $RPI_TARGET ] && RPI_TARGET=raspberrypi
+
+sudo mv image.img ubuntu-$DISTRIB_RELEASE-arm64-$RPI_TARGET.img
+sudo xz -1 --verbose ubuntu-$DISTRIB_RELEASE-arm64-$RPI_TARGET.img
+sha256sum ubuntu-$DISTRIB_RELEASE-arm64-$RPI_TARGET.img.xz > ubuntu-$DISTRIB_RELEASE-arm64-$RPI_TARGET.img.xz.SHA256SUM
+echo "xzcat ubuntu-$DISTRIB_RELEASE-arm64-$RPI_TARGET.img.xz | pv | sudo dd of=/dev/sdX"
 cd ..
+
