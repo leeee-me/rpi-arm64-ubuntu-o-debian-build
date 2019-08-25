@@ -32,6 +32,10 @@ cp kernel-build/arch/arm64/boot/Image $S/boot/kernel8.img
 cp kernel-build/arch/arm64/boot/dts/broadcom/*.dtb $S/boot
 rm $S/boot/*dts*
 rm $S/boot/*old
+rm $S/boot/Image
+rm $S/boot/u-boot*
+rm $S/boot/boot.scr
+rm $S/boot/initrd.img
 
 cd ..
 
@@ -61,7 +65,7 @@ echo "earlyprintk dwc_otg.fiq_fix_enable=2 console=ttyAMA0,115200 console=tty1 r
 
 cd $S
 
-echo “RPI_TARGET=rpi4b” > ./.RPi-Target
+echo RPI_TARGET=rpi4b > ./.RPi-Target
 
 make -C linux ARCH=arm64 O=./kernel-build CROSS_COMPILE=$CROSS -j4 bindeb-pkg
 mkdir deb-pkg

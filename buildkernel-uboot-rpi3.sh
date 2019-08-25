@@ -7,8 +7,8 @@ sudo apt-get install bc bison flex libssl-dev u-boot-tools
 
 CROSS=aarch64-linux-gnu-
 
-git clone --depth 1 --branch v2018.11 git://git.denx.de/u-boot.git v2018.11
-cd v2018.11
+git clone --depth 1 --branch v2017.11 git://git.denx.de/u-boot.git v2017.11
+cd v2017.11
 make CROSS_COMPILE=$CROSS rpi_3_defconfig
 make CROSS_COMPILE=$CROSS
 
@@ -28,7 +28,7 @@ mkimage -A arm64 -O linux -T script -d u-boot-script.txt boot.scr
 sudo cp boot.scr $S/boot
 cd ..
 
-git clone --depth=1 -b rpi-4.19.y https://github.com/raspberrypi/linux.git
+git clone --depth=1 -b rpi-4.14.y https://github.com/raspberrypi/linux.git
 cd linux
 mkdir kernel-build
 make ARCH=arm64 O=./kernel-build/ CROSS_COMPILE=$CROSS bcmrpi3_defconfig
@@ -43,10 +43,10 @@ sudo make ARCH=arm64 O=./kernel-build/ CROSS_COMPILE=$CROSS headers_install INST
 sudo depmod --basedir $S/rootfs/ "$KERNEL_VERSION"
 
 cp kernel-build/arch/arm64/boot/Image $S/boot/Image
-cp kernel-build/arch/arm64/boot/Image $S/boot/kernel8.img
 cp kernel-build/arch/arm64/boot/dts/broadcom/*.dtb $S/boot
 rm $S/boot/*dts*
 rm $S/boot/*old
+rm $S/boot/kernel*img
 
 cd ..
 
@@ -72,7 +72,7 @@ echo "earlyprintk dwc_otg.lpm_enable=0 console=ttyAMA0,115200 console=tty1 root=
 
 cd $S
 
-echo “RPI_TARGET=rpi3b” > ./.RPi-Target
+echo RPI_TARGET=rpi3b > ./.RPi-Target
 
 make -C linux ARCH=arm64 O=./kernel-build CROSS_COMPILE=$CROSS -j4 bindeb-pkg
 mkdir deb-pkg
