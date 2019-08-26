@@ -12,16 +12,19 @@ git clone --depth=1 -b rpi-$LINUX_RPI https://github.com/raspberrypi/linux.git l
 cd linux-$LINUX_RPI
 mkdir kernel-build
 
-make ARCH=arm64 O=./kernel-build/ CROSS_COMPILE=$CROSS rpi_3_defconfig
+make ARCH=arm64 O=./kernel-build/ CROSS_COMPILE=$CROSS bcmrpi3_defconfig
 make ARCH=arm64 O=./kernel-build/ CROSS_COMPILE=$CROSS 
 
 KERNEL_VERSION=`cat ./kernel-build/include/generated/utsrelease.h | sed -e 's/.*"\(.*\)".*/\1/'` 
 
+sudo rm -rf $S/rootfs/lib/modules/*
+sudo rm -rf $S/boot/config-*
+sudo rm -rf $S/boot/System.map-*
+sudo rm -rf $S/boot/vmlinuz-*
+
 make ARCH=arm64 O=./kernel-build/ CROSS_COMPILE=$CROSS install INSTALL_PATH=$S/boot
 sudo make ARCH=arm64 O=./kernel-build/ CROSS_COMPILE=$CROSS modules_install INSTALL_MOD_PATH=$S/rootfs INSTALL_FW_PATH=$S/rootfs/lib/firmware
 sudo make ARCH=arm64 O=./kernel-build/ CROSS_COMPILE=$CROSS headers_install INSTALL_HDR_PATH=$S/rootfs/usr
-
-#sudo depmod --basedir $S/rootfs/ "$KERNEL_VERSION"
 
 cp kernel-build/arch/arm64/boot/Image $S/boot/kernel8.img
 cp kernel-build/arch/arm64/boot/dts/broadcom/*.dtb $S/boot
@@ -42,7 +45,6 @@ enable_uart=1
 # Use kernel8.img
 kernel=kernel8.img
 
-device_tree_address=0x03000000
 dtparam=i2c_arm=on
 dtparam=spi=on
 arm_64bit=1
@@ -55,9 +57,12 @@ cd $S
 
 echo RPI_TARGET=rpi3b > ./.RPi-Target
 
-make -C linux-$LINUX_RPI ARCH=arm64 O=./kernel-build CROSS_COMPILE=$CROSS bindeb-pkg
+cd linux-$LINUX_RPI
+make ARCH=arm64 O=./kernel-build CROSS_COMPILE=$CROSS bindeb-pkg
+cd ..
+
 mkdir deb-pkg
-mv linux/linux-* deb-pkg
+mv linux-$LINUX_RPI/linux-* deb-pkg
 
 echo "Debian packages of linux-image and linux-headers are generated, "
 

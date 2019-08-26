@@ -36,7 +36,7 @@ sudo kpartx -d image.img
 [ -z $RPI_TARGET ] && RPI_TARGET=raspberrypi
 
 sudo mv image.img ubuntu-$DISTRIB_RELEASE-arm64-$RPI_TARGET.img
-sudo rm ubuntu-$DISTRIB_RELEASE-arm64-$RPI_TARGET.img.xz
+sudo rm -rf ubuntu-$DISTRIB_RELEASE-arm64-$RPI_TARGET.img.xz
 sudo xz -1 --verbose ubuntu-$DISTRIB_RELEASE-arm64-$RPI_TARGET.img
 sha256sum ubuntu-$DISTRIB_RELEASE-arm64-$RPI_TARGET.img.xz > ubuntu-$DISTRIB_RELEASE-arm64-$RPI_TARGET.img.xz.SHA256SUM
 echo "xzcat ubuntu-$DISTRIB_RELEASE-arm64-$RPI_TARGET.img.xz | pv | sudo dd of=/dev/sdX"

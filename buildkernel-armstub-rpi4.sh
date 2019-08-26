@@ -6,6 +6,7 @@ sudo apt-get install gcc-aarch64-linux-gnu dpkg-dev
 sudo apt-get install bc bison flex libssl-dev 
 
 CROSS=aarch64-linux-gnu-
+LINUX_RPI=4.19.y
 
 git clone https://github.com/raspberrypi/tools.git
 cd tools/armstubs
@@ -13,34 +14,33 @@ git checkout 7f4a937e1bacbc111a22552169bc890b4bb26a94
 make armstub8-gic.bin
 cp armstub8-gic.bin $S/boot/armstub8-gic.bin
 
-
-git clone --depth=1 -b rpi-4.19.y https://github.com/raspberrypi/linux.git
-cd linux
+git clone --depth=1 -b rpi-$LINUX_RPI https://github.com/raspberrypi/linux.git linux-$LINUX_RPI
+cd linux-$LINUX_RPI
 mkdir kernel-build
 make ARCH=arm64 O=./kernel-build/ CROSS_COMPILE=$CROSS bcm2711_defconfig
-make ARCH=arm64 O=./kernel-build/ CROSS_COMPILE=$CROSS -j4
+make ARCH=arm64 O=./kernel-build/ CROSS_COMPILE=$CROSS
 
 KERNEL_VERSION=`cat ./kernel-build/include/generated/utsrelease.h | sed -e 's/.*"\(.*\)".*/\1/'` 
+
+sudo rm -rf $S/rootfs/lib/modules/*
+sudo rm -rf $S/boot/config-*
+sudo rm -rf $S/boot/System.map-*
+sudo rm -rf $S/boot/vmlinuz-*
 
 make ARCH=arm64 O=./kernel-build/ CROSS_COMPILE=$CROSS install INSTALL_PATH=$S/boot
 sudo make ARCH=arm64 O=./kernel-build/ CROSS_COMPILE=$CROSS modules_install INSTALL_MOD_PATH=$S/rootfs INSTALL_FW_PATH=$S/rootfs/lib/firmware
 sudo make ARCH=arm64 O=./kernel-build/ CROSS_COMPILE=$CROSS headers_install INSTALL_HDR_PATH=$S/rootfs/usr
 
-#sudo depmod --basedir $S/rootfs/ "$KERNEL_VERSION"
-
 cp kernel-build/arch/arm64/boot/Image $S/boot/kernel8.img
 cp kernel-build/arch/arm64/boot/dts/broadcom/*.dtb $S/boot
-rm $S/boot/*dts*
-rm $S/boot/*old
-rm $S/boot/Image
-rm $S/boot/u-boot*
-rm $S/boot/boot.scr
-rm $S/boot/initrd.img
+sudo rm -rf $S/boot/*dts*
+sudo rm -rf $S/boot/*old
+sudo rm -rf $S/boot/Image
+sudo rm -rf $S/boot/u-boot*
+sudo rm -rf $S/boot/boot.scr
+sudo rm -rf $S/boot/initrd.img
 
 cd ..
-
-sudo chroot rootfs/ mkinitramfs -o /root/initrd.img $KERNEL_VERSION
-sudo mv rootfs/root/initrd.img $S/boot
 
 cat <<"EOM" > $S/boot/config.txt
 
@@ -67,10 +67,9 @@ cd $S
 
 echo RPI_TARGET=rpi4b > ./.RPi-Target
 
-make -C linux ARCH=arm64 O=./kernel-build CROSS_COMPILE=$CROSS -j4 bindeb-pkg
+make -C linux-$LINUX_RPI ARCH=arm64 O=./kernel-build CROSS_COMPILE=$CROSS bindeb-pkg
 mkdir deb-pkg
-mv linux/linux-* deb-pkg
+mv linux-$LINUX_RPI/linux-* deb-pkg
 
 echo "Debian packages of linux-image and linux-headers are generated, "
-echo "Please note that vmlinuz is gzip-compressed Image(.gz), and it must be gunziped as Image for u-boot"
 

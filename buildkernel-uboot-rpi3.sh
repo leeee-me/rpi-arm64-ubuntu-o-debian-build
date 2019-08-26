@@ -6,6 +6,7 @@ sudo apt-get install gcc-aarch64-linux-gnu dpkg-dev
 sudo apt-get install bc bison flex libssl-dev u-boot-tools
 
 CROSS=aarch64-linux-gnu-
+LINUX_RPI=4.14.y
 
 git clone --depth 1 --branch v2017.11 git://git.denx.de/u-boot.git v2017.11
 cd v2017.11
@@ -28,25 +29,29 @@ mkimage -A arm64 -O linux -T script -d u-boot-script.txt boot.scr
 sudo cp boot.scr $S/boot
 cd ..
 
-git clone --depth=1 -b rpi-4.14.y https://github.com/raspberrypi/linux.git
-cd linux
+git clone --depth=1 -b rpi-$LINUX_RPI https://github.com/raspberrypi/linux.git linux-$LINUX_RPI
+cd linux-$LINUX_RPI
 mkdir kernel-build
 make ARCH=arm64 O=./kernel-build/ CROSS_COMPILE=$CROSS bcmrpi3_defconfig
-make ARCH=arm64 O=./kernel-build/ CROSS_COMPILE=$CROSS -j4
+make ARCH=arm64 O=./kernel-build/ CROSS_COMPILE=$CROSS 
 
 KERNEL_VERSION=`cat ./kernel-build/include/generated/utsrelease.h | sed -e 's/.*"\(.*\)".*/\1/'` 
+
+sudo rm -rf $S/rootfs/lib/modules/*
+sudo rm -rf $S/boot/config-*
+sudo rm -rf $S/boot/System.map-*
+sudo rm -rf $S/boot/vmlinuz-*
 
 make ARCH=arm64 O=./kernel-build/ CROSS_COMPILE=$CROSS install INSTALL_PATH=$S/boot
 sudo make ARCH=arm64 O=./kernel-build/ CROSS_COMPILE=$CROSS modules_install INSTALL_MOD_PATH=$S/rootfs INSTALL_FW_PATH=$S/rootfs/lib/firmware
 sudo make ARCH=arm64 O=./kernel-build/ CROSS_COMPILE=$CROSS headers_install INSTALL_HDR_PATH=$S/rootfs/usr
 
-sudo depmod --basedir $S/rootfs/ "$KERNEL_VERSION"
-
 cp kernel-build/arch/arm64/boot/Image $S/boot/Image
 cp kernel-build/arch/arm64/boot/dts/broadcom/*.dtb $S/boot
-rm $S/boot/*dts*
-rm $S/boot/*old
-rm $S/boot/kernel*img
+sudo rm -rf $S/boot/*dts*
+sudo rm -rf $S/boot/*old
+sudo rm -rf $S/boot/kernel*img
+sudo rm -rf $S/boot/arm*bin
 
 cd ..
 
@@ -72,11 +77,11 @@ echo "earlyprintk dwc_otg.lpm_enable=0 console=ttyAMA0,115200 console=tty1 root=
 
 cd $S
 
-echo RPI_TARGET=rpi3b > ./.RPi-Target
+echo RPI_TARGET=rpi3b-uboot > ./.RPi-Target
 
-make -C linux ARCH=arm64 O=./kernel-build CROSS_COMPILE=$CROSS -j4 bindeb-pkg
+make -C linux-$LINUX_RPI ARCH=arm64 O=./kernel-build CROSS_COMPILE=$CROSS bindeb-pkg
 mkdir deb-pkg
-mv linux/linux-* deb-pkg
+mv linux-$LINUX_RPI/linux-* deb-pkg
 
 echo "Debian packages of linux-image and linux-headers are generated, "
 echo "Please note that vmlinuz is gzip-compressed Image(.gz), and it must be gunziped as Image for u-boot"
