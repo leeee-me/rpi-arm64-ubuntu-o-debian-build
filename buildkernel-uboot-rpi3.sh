@@ -84,5 +84,5 @@ mkdir deb-pkg
 mv linux-$LINUX_RPI/linux-* deb-pkg
 
 echo "Debian packages of linux-image and linux-headers are generated, "
-echo "Please note that vmlinuz is gzip-compressed Image(.gz), and it must be gunziped as Image for u-boot"
+echo "Please note that vmlinuz is gzip-compressed Image(.gz), and it must be gunziped as uncompressed Image for u-boot's aarch64 booti command
 
