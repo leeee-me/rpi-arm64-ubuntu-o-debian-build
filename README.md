@@ -20,6 +20,9 @@ $ ./buildrootfs.sh
 $ ./buildfirmware.sh
 $ ./buildkernel-uboot-rpi3.sh  # this is RPi3 kernel boot with u-boot
   or
+$ ./buildkernel-armstub-rpi3.sh # this is RPi3 kernel boot by default stub (to support 4.19.y boot-up directly since u-boot cannot boot up the new firmware? possibly here?
+  https://github.com/raspberrypi/firmware/issues/1157
+  or
 $ ./buildkernel-armstub-rpi4.sh # this is RPi4 kernel boot with armstub8 (temp workaround solution)
 $ ./buildimage.sh
 </pre>
