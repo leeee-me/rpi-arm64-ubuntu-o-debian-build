@@ -35,7 +35,7 @@ git clone --depth=1 -b rpi-$LINUX_RPI https://github.com/raspberrypi/linux.git l
 cd linux-$LINUX_RPI
 mkdir kernel-build
 make ARCH=arm64 O=./kernel-build/ CROSS_COMPILE=$CROSS bcmrpi3_defconfig
-make ARCH=arm64 O=./kernel-build/ CROSS_COMPILE=$CROSS 
+make ARCH=arm64 O=./kernel-build/ CROSS_COMPILE=$CROSS -j$(nproc)
 
 KERNEL_VERSION=`cat ./kernel-build/include/generated/utsrelease.h | sed -e 's/.*"\(.*\)".*/\1/'` 
 
@@ -78,9 +78,9 @@ cd $S
 
 echo RPI_TARGET=rpi3b-uboot-2 > ./.RPi-Target
 
-make -C linux-$LINUX_RPI ARCH=arm64 O=./kernel-build CROSS_COMPILE=$CROSS bindeb-pkg
+make -C linux-$LINUX_RPI ARCH=arm64 O=./kernel-build CROSS_COMPILE=$CROSS -j$(nproc) bindeb-pkg
 mkdir deb-pkg
-mv linux-$LINUX_RPI/linux-* deb-pkg
+mv linux-$LINUX_RPI/linux-*deb deb-pkg
 
 echo "Debian packages of linux-image and linux-headers are generated, "
 echo "Please note that vmlinuz is gzip-compressed Image(.gz), and it must be gunziped as uncompressed Image for u-boot's aarch64 booti command"

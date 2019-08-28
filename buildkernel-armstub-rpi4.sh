@@ -14,11 +14,13 @@ git checkout 7f4a937e1bacbc111a22552169bc890b4bb26a94
 make armstub8-gic.bin
 cp armstub8-gic.bin $S/boot/armstub8-gic.bin
 
+cd $S
+
 git clone --depth=1 -b rpi-$LINUX_RPI https://github.com/raspberrypi/linux.git linux-$LINUX_RPI
 cd linux-$LINUX_RPI
 mkdir kernel-build
 make ARCH=arm64 O=./kernel-build/ CROSS_COMPILE=$CROSS bcm2711_defconfig
-make ARCH=arm64 O=./kernel-build/ CROSS_COMPILE=$CROSS
+make ARCH=arm64 O=./kernel-build/ CROSS_COMPILE=$CROSS -j$(nproc)
 
 KERNEL_VERSION=`cat ./kernel-build/include/generated/utsrelease.h | sed -e 's/.*"\(.*\)".*/\1/'` 
 
@@ -67,9 +69,11 @@ cd $S
 
 echo RPI_TARGET=rpi4b > ./.RPi-Target
 
-make -C linux-$LINUX_RPI ARCH=arm64 O=./kernel-build CROSS_COMPILE=$CROSS bindeb-pkg
+cd linux-$LINUX_RPI
+make ARCH=arm64 O=./kernel-build CROSS_COMPILE=$CROSS -j$(nproc) bindeb-pkg
+cd ..
+
 mkdir deb-pkg
-mv linux-$LINUX_RPI/linux-* deb-pkg
+mv linux-$LINUX_RPI/linux-*deb deb-pkg
 
 echo "Debian packages of linux-image and linux-headers are generated, "
-

@@ -13,7 +13,7 @@ cd linux-$LINUX_RPI
 mkdir kernel-build
 
 make ARCH=arm64 O=./kernel-build/ CROSS_COMPILE=$CROSS bcmrpi3_defconfig
-make ARCH=arm64 O=./kernel-build/ CROSS_COMPILE=$CROSS 
+make ARCH=arm64 O=./kernel-build/ CROSS_COMPILE=$CROSS -j$(nproc)
 
 KERNEL_VERSION=`cat ./kernel-build/include/generated/utsrelease.h | sed -e 's/.*"\(.*\)".*/\1/'` 
 
@@ -58,11 +58,11 @@ cd $S
 echo RPI_TARGET=rpi3b > ./.RPi-Target
 
 cd linux-$LINUX_RPI
-make ARCH=arm64 O=./kernel-build CROSS_COMPILE=$CROSS bindeb-pkg
+make ARCH=arm64 O=./kernel-build CROSS_COMPILE=$CROSS -j$(nproc) bindeb-pkg
 cd ..
 
 mkdir deb-pkg
-mv linux-$LINUX_RPI/linux-* deb-pkg
+mv linux-$LINUX_RPI/linux-*deb deb-pkg
 
 echo "Debian packages of linux-image and linux-headers are generated, "
 
