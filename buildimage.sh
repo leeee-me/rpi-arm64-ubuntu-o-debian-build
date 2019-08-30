@@ -29,16 +29,19 @@ sudo umount /mnt
 sudo sync
 sudo kpartx -d image.img
 
-. rootfs/etc/lsb-release
+[ -f rootfs/etc/lsb-release ] && . rootfs/etc/lsb-release && OS_VER=$DISTRIB_ID-$DISTRIB_RELEASE
+
+[ -f rootfs/etc/os-release ] && . rootfs/etc/os-release && OS_VER=$ID-$VERSION_ID
 
 . ./.RPi-Target
 
-[ -z $RPI_TARGET ] && RPI_TARGET=raspberrypi
+[ -z $RPI_VER ] && RPI_VER=raspberrypi
+[ -z $OS_VER ] && OS_VER=unknown-none
 
-sudo mv image.img ubuntu-$DISTRIB_RELEASE-arm64-$RPI_TARGET.img
-sudo rm -rf ubuntu-$DISTRIB_RELEASE-arm64-$RPI_TARGET.img.xz
-sudo xz -1 --verbose ubuntu-$DISTRIB_RELEASE-arm64-$RPI_TARGET.img
-sha256sum ubuntu-$DISTRIB_RELEASE-arm64-$RPI_TARGET.img.xz > ubuntu-$DISTRIB_RELEASE-arm64-$RPI_TARGET.img.xz.SHA256SUM
-echo "xzcat ubuntu-$DISTRIB_RELEASE-arm64-$RPI_TARGET.img.xz | pv | sudo dd of=/dev/sdX"
+sudo mv image.img $OS_VER-arm64-$RPI_VER.img
+sudo rm -rf $OS_VER-arm64-$RPI_VER.img.xz
+sudo xz -1 --verbose $OS_VER-arm64-$RPI_VER.img
+sha256sum $OS_VER-arm64-$RPI_VER.img.xz > $OS_VER-arm64-$RPI_VER.img.xz.SHA256SUM
+echo "xzcat $OS_VER-arm64-$RPI_VER.img.xz | pv | sudo dd of=/dev/sdX"
 cd ..
 

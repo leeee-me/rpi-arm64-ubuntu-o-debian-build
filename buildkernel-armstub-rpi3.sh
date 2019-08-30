@@ -55,7 +55,7 @@ echo "earlyprintk dwc_otg.fiq_fix_enable=2 console=ttyAMA0,115200 console=tty1 r
 
 cd $S
 
-echo RPI_TARGET=rpi3b > ./.RPi-Target
+echo RPI_VER=rpi3b > ./.RPi-Target
 
 cd linux-$LINUX_RPI
 make ARCH=arm64 O=./kernel-build CROSS_COMPILE=$CROSS -j$(nproc) bindeb-pkg
