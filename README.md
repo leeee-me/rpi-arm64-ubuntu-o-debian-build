@@ -1,4 +1,4 @@
-# rpi-arm64-ubuntu-build
+# rpi-arm64-ubuntu-o-debian-build
 
 Build RPi3/RPi4 boot and Ubuntu system root rootfs with u-boot bootloader support in arm64 / aarch64
 
@@ -7,10 +7,10 @@ However, I do not fork it. Instead, I revised it and left it here for future imp
 
 This recipe of scripts already were verified on an amd64 Ubuntu 16.04 LTS with Raspberry Pi 3 Model B v1.2. The verified target is arm64 Ubuntu 18.04 LTS.
 
-(
+(<br>
 Updated: Raspberry Pi 4 Model B is coming now. I modified the scripts by some known and explored workarounds by
-https://blog.cloudkernels.net/posts/rpi4-64bit-image/
-https://jamesachambers.com/raspberry-pi-ubuntu-server-18-04-2-installation-guide/
+https://blog.cloudkernels.net/posts/rpi4-64bit-image/<br>
+https://jamesachambers.com/raspberry-pi-ubuntu-server-18-04-2-installation-guide/<br>
 )
 
 
@@ -20,16 +20,20 @@ $ ./buildrootfs.sh
 $ ./buildfirmware.sh
 $ ./buildkernel-uboot-rpi3.sh  # this is RPi3 kernel boot with u-boot
   or
-$ ./buildkernel-armstub-rpi3.sh # this is RPi3 kernel boot by default stub (to support 4.19.y boot-up directly since u-boot cannot boot up the new firmware? possibly here?
+  ./buildkernel-uboot-rpi3-2.sh # this is RPi3 kernel boot with newer 4.15.y and v2018.11 u-boot supported booti with vmlinuz
+  or
+$ ./buildkernel-armstub-rpi3.sh # this is RPi3 kernel boot by default stub (to support 4.19.y boot directly since u-boot cannot boot up the new firmware? possibly here?
   https://github.com/raspberrypi/firmware/issues/1157
   or
 $ ./buildkernel-armstub-rpi4.sh # this is RPi4 kernel boot with armstub8 (temp workaround solution)
 $ ./buildimage.sh
 </pre>
-Then you obtained image of "ubuntu-${DISTRIB_RELEASE}-arm64-${RPT_TARGET}.img", and you could place it on to your micro SD card. 
+Then you obtained image of "${VER}-arm64-${RPT_VER}.img", and you could place it on to your micro SD card. 
 <pre>
-$ xzcat ubuntu-VV.vv-arm64-ttt.img.xz | pv | sudo dd of=/dev/sdX
+$ xzcat DISTRIB-RELEASE-arm64-RPI_TARGET.img.xz | pv | sudo dd of=/dev/sdX
 </pre>
+
+<b>If you need mmcli/nmcli to support 3G/LTE modem (cdc-wdm0/wwan0), suggest to use Debian distrib instead of Ubuntu Bionic. I tried it and that did not work correctly on some QMI mPCIe modem such as EC25/EG25.</b>
 
 I strongly suggest you to connect your RPi 3 with a UART/USB cable and watch it booting-up on a console/terminal emulator (PuTTY, TeraTerm, minicom, etc)
 You could rebuild the kernel all the time when the upstream kernel is upgraded, then just replace the following stuffs in your microSD card:
@@ -338,230 +342,5 @@ See "man sudo_root" for details.
 
 ubuntu@ubuntu-pi:~$ uname -a
 Linux ubuntu-pi 4.14.58-v8+ #1 SMP PREEMPT Fri Jul 27 15:40:04 CST 2018 aarch64 aarch64 aarch64 GNU/Linux
-ubuntu@ubuntu-pi:~$ dpkg -l
-Desired=Unknown/Install/Remove/Purge/Hold
-| Status=Not/Inst/Conf-files/Unpacked/halF-conf/Half-inst/trig-aWait/Trig-pend
-|/ Err?=(none)/Reinst-required (Status,Err: uppercase=bad)
-||/ Name           Version      Architecture Description
-+++-==============-============-============-=================================
-ii  adduser        3.116ubuntu1 all          add and remove users and groups
-ii  apt            1.6.1        arm64        commandline package manager
-ii  apt-utils      1.6.1        arm64        package management related utilit
-ii  base-files     10.1ubuntu2  arm64        Debian base system miscellaneous
-ii  base-passwd    3.5.44       arm64        Debian base system master passwor
-ii  bash           4.4.18-2ubun arm64        GNU Bourne Again SHell
-ii  bash-completio 1:2.8-1ubunt all          programmable completion for the b
-ii  bsdutils       1:2.31.1-0.4 arm64        basic utilities from 4.4BSD-Lite
-ii  busybox-initra 1:1.27.2-2ub arm64        Standalone shell setup for initra
-ii  bzip2          1.0.6-8.1    arm64        high-quality block-sorting file c
-ii  ca-certificate 20180409     all          Common CA certificates
-ii  console-setup  1.178ubuntu2 all          console font and keymap setup pro
-ii  console-setup- 1.178ubuntu2 all          Linux specific part of console-se
-ii  coreutils      8.28-1ubuntu arm64        GNU core utilities
-ii  cpio           2.12+dfsg-6  arm64        GNU cpio -- a program to manage a
-ii  cron           3.0pl1-128.1 arm64        process scheduling daemon
-ii  dash           0.5.8-2.10   arm64        POSIX-compliant shell
-ii  dbus           1.12.2-1ubun arm64        simple interprocess messaging sys
-ii  debconf        1.5.66       all          Debian configuration management s
-ii  debconf-i18n   1.5.66       all          full internationalization support
-ii  debianutils    4.8.4        arm64        Miscellaneous utilities specific
-ii  diffutils      1:3.6-1      arm64        File comparison utilities
-ii  distro-info-da 0.37         all          information about the distributio
-ii  dmsetup        2:1.02.145-4 arm64        Linux Kernel Device Mapper usersp
-ii  dpkg           1.19.0.5ubun arm64        Debian package management system
-ii  e2fsprogs      1.44.1-1     arm64        ext2/ext3/ext4 file system utilit
-ii  eject          2.1.5+deb1+c arm64        ejects CDs and operates CD-Change
-ii  ethtool        1:4.15-0ubun arm64        display or change Ethernet device
-ii  fdisk          2.31.1-0.4ub arm64        collection of partitioning utilit
-ii  file           1:5.32-2     arm64        Recognize the type of data in a f
-ii  findutils      4.6.0+git+20 arm64        utilities for finding files--find
-ii  gcc-8-base:arm 8-20180414-1 arm64        GCC, the GNU Compiler Collection
-ii  gir1.2-glib-2. 1.56.1-1     arm64        Introspection data for GLib, GObj
-ii  gpgv           2.2.4-1ubunt arm64        GNU privacy guard - signature ver
-ii  grep           3.1-2        arm64        GNU grep, egrep and fgrep
-ii  gzip           1.6-5ubuntu1 arm64        GNU compression utilities
-ii  hostname       3.20         arm64        utility to set/show the host name
-ii  ifupdown       0.8.17ubuntu arm64        high level tools to configure net
-ii  init           1.51         arm64        metapackage ensuring an init syst
-ii  init-system-he 1.51         all          helper tools for all init systems
-ii  initramfs-tool 0.130ubuntu3 all          generic modular initramfs generat
-ii  initramfs-tool 0.130ubuntu3 arm64        binaries used by initramfs-tools
-ii  initramfs-tool 0.130ubuntu3 all          generic modular initramfs generat
-ii  iproute2       4.15.0-2ubun arm64        networking and traffic control to
-ii  iputils-ping   3:20161105-1 arm64        Tools to test the reachability of
-ii  isc-dhcp-clien 4.3.5-3ubunt arm64        DHCP client for automatically obt
-ii  isc-dhcp-commo 4.3.5-3ubunt arm64        common manpages relevant to all o
-ii  kbd            2.0.4-2ubunt arm64        Linux console font and keytable u
-ii  keyboard-confi 1.178ubuntu2 all          system-wide keyboard preferences
-ii  klibc-utils    2.0.4-9ubunt arm64        small utilities built with klibc
-ii  kmod           24-1ubuntu3  arm64        tools for managing Linux kernel m
-ii  less           487-0.1      arm64        pager program similar to more
-ii  libacl1:arm64  2.2.52-3buil arm64        Access control list shared librar
-ii  libapparmor1:a 2.12-4ubuntu arm64        changehat AppArmor library
-ii  libapt-inst2.0 1.6.1        arm64        deb package format runtime librar
-ii  libapt-pkg5.0: 1.6.1        arm64        package management runtime librar
-ii  libargon2-0:ar 0~20161029-1 arm64        memory-hard hashing function - ru
-ii  libatm1:arm64  1:2.5.1-2bui arm64        shared library for ATM (Asynchron
-ii  libattr1:arm64 1:2.4.47-2bu arm64        Extended attribute shared library
-ii  libaudit-commo 1:2.8.2-1ubu all          Dynamic library for security audi
-ii  libaudit1:arm6 1:2.8.2-1ubu arm64        Dynamic library for security audi
-ii  libblkid1:arm6 2.31.1-0.4ub arm64        block device ID library
-ii  libbsd0:arm64  0.8.7-1      arm64        utility functions from BSD system
-ii  libbz2-1.0:arm 1.0.6-8.1    arm64        high-quality block-sorting file c
-ii  libc-bin       2.27-3ubuntu arm64        GNU C Library: Binaries
-ii  libc6:arm64    2.27-3ubuntu arm64        GNU C Library: Shared libraries
-ii  libcap-ng0:arm 0.7.7-3.1    arm64        An alternate POSIX capabilities l
-ii  libcap2:arm64  1:2.25-1.2   arm64        POSIX 1003.1e capabilities (libra
-ii  libcap2-bin    1:2.25-1.2   arm64        POSIX 1003.1e capabilities (utili
-ii  libcom-err2:ar 1.44.1-1     arm64        common error description library
-ii  libcryptsetup1 2:2.0.2-1ubu arm64        disk encryption support - shared
-ii  libdb5.3:arm64 5.3.28-13.1u arm64        Berkeley v5.3 Database Libraries
-ii  libdbus-1-3:ar 1.12.2-1ubun arm64        simple interprocess messaging sys
-ii  libdebconfclie 0.213ubuntu1 arm64        Debian Configuration Management S
-ii  libdevmapper1. 2:1.02.145-4 arm64        Linux Kernel Device Mapper usersp
-ii  libdns-export1 1:9.11.3+dfs arm64        Exported DNS Shared Library
-ii  libedit2:arm64 3.1-20170329 arm64        BSD editline and history librarie
-ii  libelf1:arm64  0.170-0.4    arm64        library to read and write ELF fil
-ii  libestr0:arm64 0.1.10-2.1   arm64        Helper functions for handling str
-ii  libexpat1:arm6 2.2.5-3      arm64        XML parsing C library - runtime l
-ii  libext2fs2:arm 1.44.1-1     arm64        ext2/ext3/ext4 file system librar
-ii  libfastjson4:a 0.99.8-2     arm64        fast json library for C
-ii  libfdisk1:arm6 2.31.1-0.4ub arm64        fdisk partitioning library
-ii  libffi6:arm64  3.2.1-8      arm64        Foreign Function Interface librar
-ii  libfribidi0:ar 0.19.7-2     arm64        Free Implementation of the Unicod
-ii  libgcc1:arm64  1:8-20180414 arm64        GCC support library
-ii  libgcrypt20:ar 1.8.1-4ubunt arm64        LGPL Crypto library - runtime lib
-ii  libgirepositor 1.56.1-1     arm64        Library for handling GObject intr
-ii  libglib2.0-0:a 2.56.1-2ubun arm64        GLib library of C routines
-ii  libglib2.0-dat 2.56.1-2ubun all          Common files for GLib library
-ii  libgmp10:arm64 2:6.1.2+dfsg arm64        Multiprecision arithmetic library
-ii  libgnutls30:ar 3.5.18-1ubun arm64        GNU TLS library - main runtime li
-ii  libgpg-error0: 1.27-6       arm64        library for common error values a
-ii  libgssapi-krb5 1.16-2build1 arm64        MIT Kerberos runtime libraries -
-ii  libhogweed4:ar 3.4-1        arm64        low level cryptographic library (
-ii  libicu60:arm64 60.2-3ubuntu arm64        International Components for Unic
-ii  libidn11:arm64 1.33-2.1ubun arm64        GNU Libidn library, implementatio
-ii  libidn2-0:arm6 2.0.4-1.1bui arm64        Internationalized domain names (I
-ii  libip4tc0:arm6 1.6.1-2ubunt arm64        netfilter libip4tc library
-ii  libisc-export1 1:9.11.3+dfs arm64        Exported ISC Shared Library
-ii  libiw30:arm64  30~pre9-12ub arm64        Wireless tools - library
-ii  libjson-c3:arm 0.12.1-1.3   arm64        JSON manipulation library - share
-ii  libk5crypto3:a 1.16-2build1 arm64        MIT Kerberos runtime libraries -
-ii  libkeyutils1:a 1.5.9-9.2ubu arm64        Linux Key Management Utilities (l
-ii  libklibc       2.0.4-9ubunt arm64        minimal libc subset for use with
-ii  libkmod2:arm64 24-1ubuntu3  arm64        libkmod shared library
-ii  libkrb5-3:arm6 1.16-2build1 arm64        MIT Kerberos runtime libraries
-ii  libkrb5support 1.16-2build1 arm64        MIT Kerberos runtime libraries -
-ii  liblocale-gett 1.07-3build2 arm64        module using libc functions for i
-ii  liblz4-1:arm64 0.0~r131-2ub arm64        Fast LZ compression algorithm lib
-ii  liblzma5:arm64 5.2.2-1.3    arm64        XZ-format compression library
-ii  libmagic-mgc   1:5.32-2     arm64        File type determination library u
-ii  libmagic1:arm6 1:5.32-2     arm64        Recognize the type of data in a f
-ii  libmnl0:arm64  1.0.4-2      arm64        minimalistic Netlink communicatio
-ii  libmount1:arm6 2.31.1-0.4ub arm64        device mounting library
-ii  libmpdec2:arm6 2.4.2-1ubunt arm64        library for decimal floating poin
-ii  libncurses5:ar 6.1-1ubuntu1 arm64        shared libraries for terminal han
-ii  libncursesw5:a 6.1-1ubuntu1 arm64        shared libraries for terminal han
-ii  libnettle6:arm 3.4-1        arm64        low level cryptographic library (
-ii  libnewt0.52:ar 0.52.20-1ubu arm64        Not Erik's Windowing Toolkit - te
-ii  libnss-systemd 237-3ubuntu1 arm64        nss module providing dynamic user
-ii  libp11-kit0:ar 0.23.9-2     arm64        library for loading and coordinat
-ii  libpam-cap:arm 1:2.25-1.2   arm64        POSIX 1003.1e capabilities (PAM m
-ii  libpam-modules 1.1.8-3.6ubu arm64        Pluggable Authentication Modules
-ii  libpam-modules 1.1.8-3.6ubu arm64        Pluggable Authentication Modules
-ii  libpam-runtime 1.1.8-3.6ubu all          Runtime support for the PAM libra
-ii  libpam-systemd 237-3ubuntu1 arm64        system and service manager - PAM
-ii  libpam0g:arm64 1.1.8-3.6ubu arm64        Pluggable Authentication Modules
-ii  libpcre3:arm64 2:8.39-9     arm64        Old Perl 5 Compatible Regular Exp
-ii  libpopt0:arm64 1.16-11      arm64        lib for parsing cmdline parameter
-ii  libprocps6:arm 2:3.3.12-3ub arm64        library for accessing process inf
-ii  libpython3-std 3.6.5-3      arm64        interactive high-level object-ori
-ii  libpython3.6-m 3.6.5-3      arm64        Minimal subset of the Python lang
-ii  libpython3.6-s 3.6.5-3      arm64        Interactive high-level object-ori
-ii  libreadline7:a 7.0-3        arm64        GNU readline and history librarie
-ii  libseccomp2:ar 2.3.1-2.1ubu arm64        high level interface to Linux sec
-ii  libselinux1:ar 2.7-2build2  arm64        SELinux runtime shared libraries
-ii  libsemanage-co 2.7-2build2  all          Common files for SELinux policy m
-ii  libsemanage1:a 2.7-2build2  arm64        SELinux policy management library
-ii  libsepol1:arm6 2.7-1        arm64        SELinux library for manipulating
-ii  libslang2:arm6 2.3.1a-3ubun arm64        S-Lang programming library - runt
-ii  libsmartcols1: 2.31.1-0.4ub arm64        smart column output alignment lib
-ii  libsqlite3-0:a 3.22.0-1     arm64        SQLite 3 shared library
-ii  libss2:arm64   1.44.1-1     arm64        command-line interface parsing li
-ii  libssl1.0.0:ar 1.0.2n-1ubun arm64        Secure Sockets Layer toolkit - sh
-ii  libssl1.1:arm6 1.1.0g-2ubun arm64        Secure Sockets Layer toolkit - sh
-ii  libstdc++6:arm 8-20180414-1 arm64        GNU Standard C++ Library v3
-ii  libsystemd0:ar 237-3ubuntu1 arm64        systemd utility library
-ii  libtasn1-6:arm 4.13-2       arm64        Manage ASN.1 structures (runtime)
-ii  libtext-charwi 0.04-7.1     arm64        get display widths of characters
-ii  libtext-iconv- 1.7-5build6  arm64        converts between character sets i
-ii  libtext-wrapi1 0.06-7.1     all          internationalized substitute of T
-ii  libtinfo5:arm6 6.1-1ubuntu1 arm64        shared low-level terminfo library
-ii  libudev1:arm64 237-3ubuntu1 arm64        libudev shared library
-ii  libunistring2: 0.9.9-0ubunt arm64        Unicode string library for C
-ii  libuuid1:arm64 2.31.1-0.4ub arm64        Universally Unique ID library
-ii  libwrap0:arm64 7.6.q-27     arm64        Wietse Venema's TCP wrappers libr
-ii  libxml2:arm64  2.9.4+dfsg1- arm64        GNOME XML library
-ii  libxtables12:a 1.6.1-2ubunt arm64        netfilter xtables library
-ii  libyaml-0-2:ar 0.1.7-2ubunt arm64        Fast YAML 1.1 parser and emitter
-ii  libzstd1:arm64 1.3.3+dfsg-2 arm64        fast lossless compression algorit
-ii  linux-base     4.5ubuntu1   all          Linux image base package
-ii  locales        2.27-3ubuntu all          GNU C Library: National Language
-ii  login          1:4.5-1ubunt arm64        system login tools
-ii  logrotate      3.11.0-0.1ub arm64        Log rotation utility
-ii  lsb-base       9.20170808ub all          Linux Standard Base init script f
-ii  lsb-release    9.20170808ub all          Linux Standard Base version repor
-ii  mawk           1.3.3-17ubun arm64        a pattern scanning and text proce
-ii  mime-support   3.60ubuntu1  all          MIME files 'mime.types' & 'mailca
-ii  mount          2.31.1-0.4ub arm64        tools for mounting and manipulati
-ii  ncurses-base   6.1-1ubuntu1 all          basic terminal type definitions
-ii  ncurses-bin    6.1-1ubuntu1 arm64        terminal-related programs and man
-ii  net-tools      1.60+git2016 arm64        NET-3 networking toolkit
-ii  netbase        5.4          all          Basic TCP/IP networking system
-ii  netcat-openbsd 1.187-1      arm64        TCP/IP swiss army knife
-ii  netplan.io     0.36.1       arm64        YAML network configuration abstra
-ii  networkd-dispa 1.7-0ubuntu3 all          Dispatcher service for systemd-ne
-ii  nplan          0.36.1       all          YAML network configuration abstra
-ii  openssh-client 1:7.6p1-4    arm64        secure shell (SSH) client, for se
-ii  openssh-server 1:7.6p1-4    arm64        secure shell (SSH) server, for se
-ii  openssh-sftp-s 1:7.6p1-4    arm64        secure shell (SSH) sftp server mo
-ii  openssl        1.1.0g-2ubun arm64        Secure Sockets Layer toolkit - cr
-ii  passwd         1:4.5-1ubunt arm64        change and administer password an
-ii  perl-base      5.26.1-6     arm64        minimal Perl system
-ii  procps         2:3.3.12-3ub arm64        /proc file system utilities
-ii  python3        3.6.5-3      arm64        interactive high-level object-ori
-ii  python3-dbus   1.2.6-1      arm64        simple interprocess messaging sys
-ii  python3-gi     3.26.1-2     arm64        Python 3 bindings for gobject-int
-ii  python3-minima 3.6.5-3      arm64        minimal subset of the Python lang
-ii  python3-yaml   3.12-1build2 arm64        YAML parser and emitter for Pytho
-ii  python3.6      3.6.5-3      arm64        Interactive high-level object-ori
-ii  python3.6-mini 3.6.5-3      arm64        Minimal subset of the Python lang
-ii  readline-commo 7.0-3        all          GNU readline and history librarie
-ii  rsyslog        8.32.0-1ubun arm64        reliable system and kernel loggin
-ii  sed            4.4-2        arm64        GNU stream editor for filtering/t
-ii  sensible-utils 0.0.12       all          Utilities for sensible alternativ
-ii  shared-mime-in 1.9-2        arm64        FreeDesktop.org shared MIME datab
-ii  ssh            1:7.6p1-4    all          secure shell client and server (m
-ii  sudo           1.8.21p2-3ub arm64        Provide limited super user privil
-ii  systemd        237-3ubuntu1 arm64        system and service manager
-ii  systemd-sysv   237-3ubuntu1 arm64        system and service manager - SysV
-ii  sysvinit-utils 2.88dsf-59.1 arm64        System-V-like utilities
-ii  tar            1.29b-2      arm64        GNU version of the tar archiving
-ii  tzdata         2018d-1      all          time zone and daylight-saving tim
-ii  ubuntu-advanta 17           all          management tools for Ubuntu Advan
-ii  ubuntu-keyring 2018.02.28   all          GnuPG keys of the Ubuntu archive
-ii  ubuntu-minimal 1.417        arm64        Minimal core of Ubuntu
-ii  ucf            3.0038       all          Update Configuration File(s): pre
-ii  udev           237-3ubuntu1 arm64        /dev/ and hotplug management daem
-ii  util-linux     2.31.1-0.4ub arm64        miscellaneous system utilities
-ii  vim-common     2:8.0.1453-1 all          Vi IMproved - Common files
-ii  vim-tiny       2:8.0.1453-1 arm64        Vi IMproved - enhanced vi editor
-ii  whiptail       0.52.20-1ubu arm64        Displays user-friendly dialog box
-ii  wireless-tools 30~pre9-12ub arm64        Tools for manipulating Linux Wire
-ii  xdg-user-dirs  0.17-1ubuntu arm64        tool to manage well known user di
-ii  xkb-data       2.23.1-1ubun all          X Keyboard Extension (XKB) config
-ii  xxd            2:8.0.1453-1 arm64        tool to make (or reverse) a hex d
-ii  xz-utils       5.2.2-1.3    arm64        XZ-format compression utilities
-ii  zlib1g:arm64   1:1.2.11.dfs arm64        compression library - runtime
 
 </pre>
