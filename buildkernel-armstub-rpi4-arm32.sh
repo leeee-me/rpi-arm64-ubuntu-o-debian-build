@@ -29,7 +29,7 @@ sudo make ARCH=arm CROSS_COMPILE=$CROSS modules_install INSTALL_MOD_PATH=$S/root
 sudo make ARCH=arm CROSS_COMPILE=$CROSS headers_install INSTALL_HDR_PATH=$S/rootfs/usr
 
 cp arch/arm/boot/Image $S/boot/kernel7.img
-cp arch/arm/boot/dts/broadcom/*.dtb $S/boot
+cp arch/arm/boot/dts/bcm2711*.dtb $S/boot
 sudo rm -rf $S/boot/*dts*
 sudo rm -rf $S/boot/*old
 sudo rm -rf $S/boot/Image
