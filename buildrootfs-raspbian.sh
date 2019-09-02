@@ -26,11 +26,12 @@ wget http://archive.raspberrypi.org/debian/raspberrypi.gpg.key --quiet -O - | su
 sudo chroot rootfs apt-key add raspberrypi.gpg.key
 
 sudo chroot rootfs apt-get update
-sudo DEBIAN_FRONTEND=noninteractive chroot rootfs apt-get install locales
+sudo DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true chroot rootfs apt-get --yes -o DPkg::Options::=--force-confdef install --no-install-recommends locales
 sudo sed -i 's/# en_US/en_US/g' rootfs/etc/locale.gen 
 sudo DEBIAN_FRONTEND=noninteractive chroot rootfs locale-gen 
-sudo DEBIAN_FRONTEND=noninteractive chroot rootfs apt-get upgrade
-sudo DEBIAN_FRONTEND=noninteractive chroot rootfs apt-get install sudo ssh net-tools ethtool wireless-tools init iputils-ping rsyslog bash-completion ifupdown tzdata --no-install-recommends
+sudo DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true chroot rootfs apt-get --yes -o DPkg::Options::=--force-confdef install  --no-install-recommends console-data console-common console-setup unicode-data tzdata most keyboard-configuration
+#sudo DEBIAN_FRONTEND=noninteractive chroot rootfs apt-get upgrade
+sudo DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true chroot rootfs apt-get --yes install  --no-install-recommends sudo ssh net-tools ethtool wireless-tools init iputils-ping rsyslog bash-completion ifupdown
 
 sudo rm rootfs/raspbian.public.key
 sudo rm rootfs/raspberrypi.gpg.key
