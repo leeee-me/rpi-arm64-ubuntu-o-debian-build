@@ -2,7 +2,7 @@
 cd build
 S=$(pwd)
 
-sudo apt-get install gcc-aarch64-linux-gnu dpkg-dev
+sudo apt-get install dpkg-dev
 sudo apt-get install bc bison flex libssl-dev 
 
 CROSS=arm-linux-gnueabihf-
