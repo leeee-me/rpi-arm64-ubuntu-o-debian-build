@@ -16,16 +16,23 @@ https://jamesachambers.com/raspberry-pi-ubuntu-server-18-04-2-installation-guide
 
 Study the scripts themselves and then customize anything you would like to have.
 <pre>
-$ ./buildrootfs.sh
+$ ./buildrootfs.sh # this is general debian or ubuntu debootstrap
+  or
+  ./buildrootfs-raspbian.sh # this is special debootstrap for RPi's raspbian
+  
 $ ./buildfirmware.sh
+
 $ ./buildkernel-uboot-rpi3.sh  # this is RPi3 kernel boot with u-boot
   or
-  ./buildkernel-uboot-rpi3-2.sh # this is RPi3 kernel boot with newer 4.15.y and v2018.11 u-boot supported booti with vmlinuz (insight from Ubuntu Bionic RPi3 server prebuilt)
+  ./buildkernel-uboot-rpi3-2.sh # this is RPi3 kernel boot with newer 4.15.y and v2018.11 u-boot supported booti with vmlinuz (insight by Ubuntu Bionic RPi3 server prebuilt)
   or
-$ ./buildkernel-armstub-rpi3.sh # this is RPi3 kernel boot by default stub (to support 4.19.y boot directly since u-boot cannot boot up the new firmware? possibly here? Will check this later.
+  ./buildkernel-armstub-rpi3.sh # this is RPi3 kernel boot by default stub (to support 4.19.y boot directly since u-boot cannot boot up the new firmware? possibly here? Will check this later.
   https://github.com/raspberrypi/firmware/issues/1157
   or
-$ ./buildkernel-armstub-rpi4.sh # this is RPi4 kernel boot with armstub8 (temp workaround solution)
+  ./buildkernel-armstub-rpi4.sh # this is RPi4 kernel boot with armstub8 (temp workaround solution)
+  or
+  ./buildkernel-armstub-rpi4-arm32.sh # this is RPi4 kernel but with armhf (arm 32bit) built-up
+  
 $ ./buildimage.sh
 </pre>
 Then you obtained image of "${VER}-arm64-${RPT_VER}.img", and you could place it on to your micro SD card. 
