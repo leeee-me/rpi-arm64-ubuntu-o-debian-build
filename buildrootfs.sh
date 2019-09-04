@@ -5,18 +5,18 @@ T=$(pwd)
 
 echo "prepare rootfs"
 sudo apt-get install debootstrap qemu-user-static
+sudo apt-get install debian-archive-keyring
+
 sudo mkdir rootfs
 #sudo qemu-debootstrap --arch arm64 bionic rootfs
 sudo qemu-debootstrap --arch arm64 buster rootfs
-sudo cp /etc/resolv.conf rootfs/etc/resolv.conf
-sudo cp /run/systemd/resolve/resolv.conf rootfs/etc/resolv.conf
-sudo chroot rootfs locale-gen en_US.UTF-8
-sudo chroot rootfs apt-get update
-sudo chroot rootfs apt-get upgrade
-sudo chroot rootfs apt-get install sudo ssh net-tools ethtool wireless-tools init iputils-ping rsyslog bash-completion ifupdown tzdata --no-install-recommends
 
-sudo chroot rootfs useradd -G sudo,adm -m -s /bin/bash pi
-sudo chroot rootfs sh -c "echo 'pi:raspberry' | chpasswd"
+cd rootfs
+sudo mount -t sysfs sysfs sys/
+sudo mount -t proc  proc proc/
+sudo mount -o bind /dev dev/
+sudo mount -o bind /dev/pts dev/pts
+cd ..
 
 echo "raspberrypi" | sudo tee rootfs/etc/hostname
 cat <<EOM > /dev/stdout | sudo tee rootfs/etc/hosts
@@ -26,6 +26,37 @@ ff02::1         ip6-allnodes
 ff02::2         ip6-allrouters
 127.0.1.1       raspberrypi
 EOM
+
+sudo chroot rootfs env -i /bin/hostname -F /etc/hostname
+
+sudo chroot rootfs apt-get update
+sudo chroot rootfs env -i HOME="/root" PATH="/bin:/usr/bin:/sbin:/usr/sbin" TERM="$TERM" DEBIAN_FRONTEND="noninteractive" \
+        apt-get --yes -o DPkg::Options::=--force-confdef install  --no-install-recommends whiptail
+
+sudo chroot rootfs env -i HOME="/root" PATH="/bin:/usr/bin:/sbin:/usr/sbin" TERM="$TERM" \
+        apt-get --yes -o DPkg::Options::=--force-confdef install  --no-install-recommends locales
+sudo chroot rootfs env -i HOME="/root" PATH="/bin:/usr/bin:/sbin:/usr/sbin" TERM="$TERM" SHELL="/bin/bash" \
+        dpkg-reconfigure locales
+
+sudo chroot rootfs env -i HOME="/root" PATH="/bin:/usr/bin:/sbin:/usr/sbin" TERM="$TERM" \
+	apt-get --yes -o DPkg::Options::=--force-confdef install  --no-install-recommends sudo ssh net-tools ethtool wireless-tools init iputils-ping rsyslog bash-completion ifupdown 
+
+sudo chroot rootfs env -i HOME="/root" PATH="/bin:/usr/bin:/sbin:/usr/sbin" TERM="$TERM" \
+        apt-get --yes -o DPkg::Options::=--force-confdef upgrade
+
+sudo chroot rootfs useradd -G sudo,adm -m -s /bin/bash pi
+sudo chroot rootfs sh -c "echo 'pi:raspberry' | chpasswd"
+
+sudo chroot rootfs apt-get --yes clean
+sudo chroot rootfs apt-get --yes autoclean
+sudo chroot rootfs apt-get --yes autoremove
+
+cd rootfs
+sudo umount ./dev/pts
+sudo umount ./dev
+sudo umount ./proc
+sudo umount ./sys
+cd ..
 
 cat <<"EOM" > /dev/stdout | sudo tee rootfs/etc/fstab
 proc            /proc           proc    defaults                  0       0
