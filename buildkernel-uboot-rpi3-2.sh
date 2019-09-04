@@ -79,8 +79,10 @@ cd $S
 echo RPI_VER=rpi3b-uboot-2 > ./.RPi-Target
 
 make -C linux-$LINUX_RPI ARCH=arm64 CROSS_COMPILE=$CROSS -j$(nproc) bindeb-pkg
+
 mkdir deb-pkg
-mv linux-$LINUX_RPI/linux-*deb deb-pkg
+mv linux-*deb deb-pkg
+mv linux-*changes linux-*info linux-$LINUX_RPI
 
 echo "Debian packages of linux-image and linux-headers are generated, "
 echo "Please note that vmlinuz is gzip-compressed Image(.gz), and it must be gunziped as uncompressed Image for u-boot's aarch64 booti command"

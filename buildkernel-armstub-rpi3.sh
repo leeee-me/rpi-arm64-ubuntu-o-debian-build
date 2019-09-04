@@ -59,7 +59,8 @@ make ARCH=arm64 CROSS_COMPILE=$CROSS -j$(nproc) bindeb-pkg
 cd ..
 
 mkdir deb-pkg
-mv linux-$LINUX_RPI/linux-*deb deb-pkg
+mv linux-*deb deb-pkg
+mv linux-*changes linux-*info linux-$LINUX_RPI
 
 echo "Debian packages of linux-image and linux-headers are generated, "
 
