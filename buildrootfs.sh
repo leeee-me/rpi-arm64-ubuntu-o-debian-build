@@ -5,11 +5,14 @@ T=$(pwd)
 
 echo "prepare rootfs"
 sudo apt-get install debootstrap qemu-user-static
-sudo apt-get install debian-archive-keyring
 
 sudo mkdir rootfs
-#sudo qemu-debootstrap --arch arm64 bionic rootfs
-sudo qemu-debootstrap --arch arm64 buster rootfs
+# For Ubuntu archive keyring
+sudo mkdir -p rootfs/usr/share/keyrings/
+sudo cp /usr/share/keyrings/ubuntu-archive-keyring.gpg rootfs/usr/share/keyrings/
+sudo qemu-debootstrap --arch arm64 bionic rootfs
+# Debain only
+#sudo qemu-debootstrap --include=debian-archive-keyring --arch arm64 buster rootfs
 
 cd rootfs
 sudo mount -t sysfs sysfs sys/
