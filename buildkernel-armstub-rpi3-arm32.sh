@@ -16,7 +16,7 @@ CROSS=$PWD/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/bin/arm
 
 git clone --depth=1 -b rpi-$LINUX_RPI https://github.com/raspberrypi/linux.git linux-$LINUX_RPI
 cd linux-$LINUX_RPI
-make ARCH=arm CROSS_COMPILE=$CROSS bcmrpi_defconfig
+make ARCH=arm CROSS_COMPILE=$CROSS bcm2709_defconfig
 make ARCH=arm CROSS_COMPILE=$CROSS -j$(nproc)
 
 sudo rm -rf $S/rootfs/lib/modules/*
@@ -52,7 +52,7 @@ dtparam=spi=on
 
 EOM
 
-echo "earlyprintk dwc_otg.lpm_enable=0 console=serial0,115200 console=ttyAMA0,115200 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 rootflags=noload fsck.repair=yes rootwait" > $S/boot/cmdline.txt
+echo "earlyprintk dwc_otg.lpm_enable=0 console=ttyAMA0,115200 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 elevator=deadline fsck.repair=yes rootwait" > $S/boot/cmdline.txt
 
 cd $S
 

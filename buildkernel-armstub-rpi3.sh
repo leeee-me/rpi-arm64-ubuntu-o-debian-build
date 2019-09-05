@@ -48,7 +48,7 @@ arm_64bit=1
 
 EOM
 
-echo "earlyprintk dwc_otg.fiq_fix_enable=2 console=ttyAMA0,115200 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 rootflags=noload fsck.repair=yes rootwait" > $S/boot/cmdline.txt
+echo "earlyprintk dwc_otg.fiq_fix_enable=0 console=ttyAMA0,115200 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 rootflags=noload fsck.repair=yes rootwait" > $S/boot/cmdline.txt
 
 cd $S
 
