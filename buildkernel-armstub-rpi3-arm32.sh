@@ -16,7 +16,7 @@ CROSS=$PWD/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/bin/arm
 
 git clone --depth=1 -b rpi-$LINUX_RPI https://github.com/raspberrypi/linux.git linux-$LINUX_RPI
 cd linux-$LINUX_RPI
-make ARCH=arm CROSS_COMPILE=$CROSS bcmrpi3_defconfig
+make ARCH=arm CROSS_COMPILE=$CROSS bcmrpi_defconfig
 make ARCH=arm CROSS_COMPILE=$CROSS -j$(nproc)
 
 sudo rm -rf $S/rootfs/lib/modules/*
