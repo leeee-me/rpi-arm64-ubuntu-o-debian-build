@@ -37,11 +37,12 @@ sudo kpartx -d image.img
 
 [ -z $RPI_VER ] && RPI_VER=raspberrypi
 [ -z $OS_VER ] && OS_VER=unknown-none
+[ -z $ROOTFS ] && ROOTFS=unknown
 
-sudo mv image.img $OS_VER-arm64-$RPI_VER.img
-sudo rm -rf $OS_VER-arm64-$RPI_VER.img.xz
-sudo xz -1 --verbose $OS_VER-arm64-$RPI_VER.img
-sha256sum $OS_VER-arm64-$RPI_VER.img.xz > $OS_VER-arm64-$RPI_VER.img.xz.SHA256SUM
-echo "xzcat $OS_VER-arm64-$RPI_VER.img.xz | pv | sudo dd of=/dev/sdX"
+sudo mv image.img $OS_VER-$ROOTFS-$RPI_VER.img
+sudo rm -rf $OS_VER-$ROOTFS-$RPI_VER.img.xz
+sudo xz -1 --verbose $OS_VER-$ROOTFS-$RPI_VER.img
+sha256sum $OS_VER-$ROOTFS-$RPI_VER.img.xz > $OS_VER-$ROOTFS-$RPI_VER.img.xz.SHA256SUM
+echo "xzcat $OS_VER-$ROOTFS-$RPI_VER.img.xz | pv | sudo dd of=/dev/sdX"
 cd ..
 

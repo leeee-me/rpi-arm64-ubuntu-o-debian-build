@@ -88,4 +88,5 @@ cd $T
 
 touch .RPi-Target
 echo "RPI_VER=" > .RPi-Target
+echo "ROOTFS=armhf" >> .RPi-Target
 

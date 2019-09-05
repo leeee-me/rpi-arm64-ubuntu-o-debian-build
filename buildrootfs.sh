@@ -71,4 +71,5 @@ cd $T
 
 touch .RPi-Target
 echo "RPI_VER=" > .RPi-Target
+echo "ROOTFS=arm64" >> .RPi-Target
 

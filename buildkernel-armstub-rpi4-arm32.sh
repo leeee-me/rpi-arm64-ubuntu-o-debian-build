@@ -56,7 +56,7 @@ echo "earlyprintk dwc_otg.lpm_enable=0 console=serial0,115200 console=ttyAMA0,11
 
 cd $S
 
-echo RPI_VER=rpi4b-knl32b > ./.RPi-Target
+echo RPI_VER=rpi4b-knl32b >> ./.RPi-Target
 
 cd linux-$LINUX_RPI
 make ARCH=arm CROSS_COMPILE=$CROSS -j$(nproc) bindeb-pkg

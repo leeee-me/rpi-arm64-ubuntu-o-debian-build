@@ -77,7 +77,7 @@ echo "earlyprintk dwc_otg.lpm_enable=0 console=ttyAMA0,115200 console=tty1 root=
 
 cd $S
 
-echo RPI_VER=rpi3b-uboot > ./.RPi-Target
+echo RPI_VER=rpi3b-uboot >> ./.RPi-Target
 
 make -C linux-$LINUX_RPI ARCH=arm64 CROSS_COMPILE=$CROSS -j$(nproc) bindeb-pkg
 
