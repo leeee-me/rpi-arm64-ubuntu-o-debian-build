@@ -16,31 +16,35 @@ https://jamesachambers.com/raspberry-pi-ubuntu-server-18-04-2-installation-guide
 
 Study the scripts themselves and then customize anything you would like to have.
 <pre>
-$ ./buildrootfs.sh # this is general debian or ubuntu debootstrap
+$ ./buildrootfs.sh # this is general aarch64 debian or ubuntu debootstrap
   or
-  ./buildrootfs-raspbian.sh # this is special debootstrap for RPi's raspbian
+  ./buildrootfs-arm32.sh # this is general armhf debian or ubuntu debootstrap
+  or
+  ./buildrootfs-raspbian.sh # this is special debootstrap for RPi's raspbian armhf only
   
 $ ./buildfirmware.sh
 
-$ ./buildkernel-uboot-rpi3.sh  # this is RPi3 kernel boot with u-boot
+$ ./buildkernel-uboot-rpi3.sh  # this is RPi3 aarch64 4.14.y kernel with v2017.11 u-boot
   or
-  ./buildkernel-uboot-rpi3-2.sh # this is RPi3 kernel boot with newer 4.15.y and v2018.11 u-boot supported booti with vmlinuz (insight by Ubuntu Bionic RPi3 server prebuilt)
+  ./buildkernel-uboot-rpi3-2.sh # this is RPi3 aarch64 4.15.y kernel and v2018.11 u-boot supported booti of vmlinuz (insight by Ubuntu Bionic RPi3 server prebuilt)
   or
-  ./buildkernel-armstub-rpi3.sh # this is RPi3 kernel boot by default stub (to support 4.19.y boot directly since u-boot cannot boot up the new firmware? possibly here? Will check this later.
+  ./buildkernel-armstub-rpi3.sh # this is RPi3 aarch64 kernel by default stub (to support 4.19.y kernel since u-boot cannot boot up the new firmware of new kernel? Will check this later.
   https://github.com/raspberrypi/firmware/issues/1157
   or
-  ./buildkernel-armstub-rpi4.sh # this is RPi4 kernel boot with armstub8 (temp workaround solution)
+  ./buildkernel-armstub-rpi3-arm32.sh # this is RPi3 armhf kernel by default stub 
   or
-  ./buildkernel-armstub-rpi4-arm32.sh # this is RPi4 kernel but with armhf (arm 32bit) built-up
+  ./buildkernel-armstub-rpi4.sh # this is RPi4 aarch64 kernel with armstub8 (a temp workaround/checkout)
+  or
+  ./buildkernel-armstub-rpi4-arm32.sh # this is RPi4 armhf kernel by default stub
   
 $ ./buildimage.sh
 </pre>
-Then you obtained image of "${VER}-arm64-${RPT_VER}.img", and you could place it on to your micro SD card. 
+Then you obtained image of "${VER}-${ROOTARCH}-${RPT_VER}.img", and you could place it on to your micro SD card. 
 <pre>
-$ xzcat DISTRIB-RELEASE-arm64-RPI_TARGET.img.xz | pv | sudo dd of=/dev/sdX
+$ xzcat DISTRIB-RELEASE-ROOTARCH-RPI_TARGET.img.xz | pv | sudo dd of=/dev/sdX
 </pre>
 
-<b>If you need mmcli/nmcli to support 3G/LTE modem (cdc-wdm0/wwan0), suggest to use Debian distrib instead of Ubuntu Bionic. I tried it and that did not work correctly on some QMI mPCIe modem such as EC25/EG25.</b>
+<b>If you need mmcli/nmcli to support 3G/LTE modem (cdc-wdm0/wwan0), suggest to use Debian distrib instead of Ubuntu Bionic. I tried it and that did not work correctly on some QMI mPCIe modem such as EC25/EG25. Or you need to revise apt sources.list to get up-to-date apt repositories manually</b>
 
 I strongly suggest you to connect your RPi 3 with a UART/USB cable and watch it booting-up on a console/terminal emulator (PuTTY, TeraTerm, minicom, etc)
 You could rebuild the kernel all the time when the upstream kernel is upgraded, then just replace the following stuffs in your microSD card:
