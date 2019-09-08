@@ -1,6 +1,6 @@
 # rpi-arm64-ubuntu-o-debian-build
 
-Build RPi3/RPi4 boot and Ubuntu system root rootfs with u-boot bootloader support in arm64 / aarch64
+Build RPi3 / RPi4 boot and Ubuntu / Debian / Raspbian system rootfs / initrd with u-boot / armstub support in armhf / aarch64
 
 This project is inspired by https://github.com/chainsx/ubuntu64-rpi/tree/ubuntu-18.04-arm64/build.
 However, I do not fork it. Instead, I revised it and left it here for future improvement.
@@ -304,7 +304,7 @@ Starting kernel ...
 [    2.741356] console [ttyS0] enabled
 [    2.747760] mmc-bcm2835 3f300000.mmc: mmc_debug:0 mmc_debug2:0
 [    2.755351] mmc-bcm2835 3f300000.mmc: DMA channel allocated
-[    2.787304] sdhost: log_buf @ ffffff80080b5000 (f9c47000)
+[    2.787304] sdhost: log_buf @ ffffff80080b5000 (f9c47000)k
 [    2.816483] mmc1: queuing unknown CIS tuple 0x80 (2 bytes)
 [    2.825206] mmc1: queuing unknown CIS tuple 0x80 (3 bytes)
 [    2.833899] mmc1: queuing unknown CIS tuple 0x80 (3 bytes)
