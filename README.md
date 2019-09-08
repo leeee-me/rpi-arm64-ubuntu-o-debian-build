@@ -16,11 +16,14 @@ https://jamesachambers.com/raspberry-pi-ubuntu-server-18-04-2-installation-guide
 
 Study the scripts themselves and then customize anything you would like to have.
 <pre>
+
 $ ./buildrootfs.sh # this is general aarch64 debian or ubuntu debootstrap
   or
   ./buildrootfs-arm32.sh # this is general armhf debian or ubuntu debootstrap
   or
   ./buildrootfs-raspbian.sh # this is special debootstrap for RPi's raspbian armhf only
+  or
+  ./buildrootfs-tasksel.sh # add tasksel with appropriate ubuntu back-port apt sources and try to install mate-desktop later
   
 $ ./buildfirmware.sh
 
@@ -37,7 +40,8 @@ $ ./buildkernel-uboot-rpi3.sh  # this is RPi3 aarch64 4.14.y kernel with v2017.1
   or
   ./buildkernel-armstub-rpi4-arm32.sh # this is RPi4 armhf kernel by default stub
   
-$ ./buildimage.sh
+$ ./buildimage-{2GB|8GB}.sh # create dd image for 2GB root or 8GB root with 128M boot partition
+
 </pre>
 Then you obtained image of "${VER}-${ROOTARCH}-${RPT_VER}.img", and you could place it on to your micro SD card. 
 <pre>
