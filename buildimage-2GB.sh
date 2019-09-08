@@ -2,7 +2,7 @@
 cd build
 sudo apt-get install -y dosfstools dump parted kpartx
 
-# make a 4G size SD card image, 128M for /boot
+# make a 2GB size SD card image, 128M for /boot
 sudo dd if=/dev/zero of=image.img bs=1M count=2048
 sudo parted image.img mktable msdos
 sudo parted image.img --script -- mkpart primary fat32 8192s 128MiB
