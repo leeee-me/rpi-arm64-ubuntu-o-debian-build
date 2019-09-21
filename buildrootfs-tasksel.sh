@@ -30,6 +30,7 @@ ff02::2         ip6-allrouters
 127.0.1.1       raspberrypi
 EOM
 
+HOST_HOSTNAME=`hostname`
 sudo chroot rootfs env -i /bin/hostname -F /etc/hostname
 
 sudo cp ../ubuntu-bionic-apt-sources.list rootfs/etc/apt/sources.list
@@ -61,6 +62,9 @@ sudo chroot rootfs env -i HOME="/root" PATH="/bin:/usr/bin:/sbin:/usr/sbin" TERM
 sudo chroot rootfs apt-get --yes clean
 sudo chroot rootfs apt-get --yes autoclean
 sudo chroot rootfs apt-get --yes autoremove
+
+sudo chroot rootfs env -i /bin/hostname $HOST_HOSTNAME
+
 
 cd rootfs
 sudo umount ./dev/pts

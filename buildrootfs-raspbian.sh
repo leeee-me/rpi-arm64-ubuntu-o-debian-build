@@ -53,7 +53,9 @@ ff02::2         ip6-allrouters
 127.0.1.1       raspberrypi
 EOM
 
-sudo chroot rootfs env -i hostname -F /etc/hostname
+HOST_HOSTNAME=`hostname`
+sudo chroot rootfs env -i /bin/hostname -F /etc/hostname
+
 
 sudo chroot rootfs env -i HOME="/root" PATH="/bin:/usr/bin:/sbin:/usr/sbin" TERM="$TERM" \
 	apt-get --yes -o DPkg::Options::=--force-confdef install  --no-install-recommends console-data console-common console-setup most sudo ssh openssh-server usbmount kmod net-tools ethtool wireless-tools init iputils-ping rsyslog bash-completion ifupdown 
@@ -70,6 +72,9 @@ sudo chroot rootfs sh -c "echo 'pi:raspberry' | chpasswd"
 sudo chroot rootfs apt-get --yes clean
 sudo chroot rootfs apt-get --yes autoclean
 sudo chroot rootfs apt-get --yes autoremove
+
+sudo chroot rootfs env -i /bin/hostname $HOST_HOSTNAME
+
 
 cd rootfs
 sudo umount ./dev/pts
