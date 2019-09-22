@@ -4,7 +4,9 @@ cd build
 T=$(pwd)
 
 echo "prepare rootfs"
-sudo apt-get install debootstrap qemu-user-static
+sudo apt-get install debootstrap binfmt-support qemu-user-static
+sudo update-binfmts --enable qemu-arm
+
 sudo apt-get install debian-archive-keyring
 sudo mkdir rootfs
 sudo debootstrap --include=ca-certificates,apt,wget --arch armhf --foreign --no-check-gpg buster rootfs http://mirrordirector.raspbian.org/raspbian/

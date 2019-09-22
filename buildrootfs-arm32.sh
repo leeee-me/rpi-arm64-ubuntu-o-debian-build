@@ -4,7 +4,8 @@ cd build
 T=$(pwd)
 
 echo "prepare rootfs"
-sudo apt-get install debootstrap qemu-user-static
+sudo apt-get install debootstrap binfmt-support qemu-user-static
+sudo update-binfmts --enable qemu-arm
 
 sudo mkdir rootfs
 # For Ubuntu archive keyring
