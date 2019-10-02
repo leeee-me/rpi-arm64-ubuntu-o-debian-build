@@ -39,6 +39,8 @@ $ ./buildkernel-uboot-rpi3.sh  # this is RPi3 aarch64 4.14.y kernel with v2017.1
   ./buildkernel-armstub-rpi4.sh # this is RPi4 aarch64 kernel with armstub8 (a temp workaround/checkout)
   or
   ./buildkernel-armstub-rpi4-arm32.sh # this is RPi4 armhf kernel by default stub
+  or
+  ./buildkernel-armstub-rpi0-arm32.sh # this is RPi0 (0w, 1) armhf kernel by default stub
 
 $ ./install-kerneldeb.sh  # there are 3 deb files in deb-pkg regarded to kernel, which can be installed into rootfs for later conveniently upgrading
   
